@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Preferences</title>
+    <style>
+        body.light { background-color: white; color: black; }
+        body.dark { background-color: black; color: white; }
+    </style>
+</head>
+<body>
+    <form id="preferencesForm">
+        <label for="theme">Theme:</label>
+        <select id="theme">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+        </select>
+        <label for="language">Language:</label>
+        <select id="language">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+        </select>
+        <label for="notifications">Notifications:</label>
+        <input type="checkbox" id="notifications">
+        <button type="submit">Save Preferences</button>
+    </form>
+    <script>
+        // Select form elements
+        const form = document.getElementById('preferencesForm');
+        const themeSelect = document.getElementById('theme');
+        const languageSelect = document.getElementById('language');
+        const notificationsCheckbox = document.getElementById('notifications');
+        // Load preferences on page load
+        window.onload = () => {
+            const storedPreferences = localStorage.getItem('preferences');
+            if (storedPreferences) {
+                const preferences = JSON.parse(storedPreferences);
+                // Fixed: Correctly setting values from localStorage
+                themeSelect.value = preferences.theme;
+                languageSelect.value = preferences.language;
+                notificationsCheckbox.checked = preferences.notifications;
+                // Apply theme immediately on page load
+                document.body.className = preferences.theme;
+            }
+        };
+        // Save preferences on form submit
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const preferences = {
+                theme: themeSelect.value,
+                language: languageSelect.value,
+                notifications: notificationsCheckbox.checked
+            };
+            // Save preferences in localStorage
+            localStorage.setItem('preferences', JSON.stringify(preferences));
+            // Apply theme dynamically
+            document.body.className = themeSelect.value;
+            alert('Preferences Saved!');
+        });
+    </script>
+</body>
+</html>
